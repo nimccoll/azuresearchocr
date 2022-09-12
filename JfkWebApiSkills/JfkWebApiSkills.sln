@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32802.440
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JfkWebApiSkills", "JfkWebApiSkills\JfkWebApiSkills.csproj", "{84D246E3-B083-4CF1-8843-FAE2461669EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JfkInitializer", "JfkInitializer\JfkInitializer.csproj", "{3D7A0B3E-F8B3-46F4-9E62-D31209562049}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobUploadAndIndex", "BlobUploadAndIndex\BlobUploadAndIndex.csproj", "{6EED70ED-8D8B-4C4D-82BA-21F8BF0DA7D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84D246E3-B083-4CF1-8843-FAE2461669EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84D246E3-B083-4CF1-8843-FAE2461669EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84D246E3-B083-4CF1-8843-FAE2461669EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84D246E3-B083-4CF1-8843-FAE2461669EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7A0B3E-F8B3-46F4-9E62-D31209562049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7A0B3E-F8B3-46F4-9E62-D31209562049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7A0B3E-F8B3-46F4-9E62-D31209562049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7A0B3E-F8B3-46F4-9E62-D31209562049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EED70ED-8D8B-4C4D-82BA-21F8BF0DA7D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EED70ED-8D8B-4C4D-82BA-21F8BF0DA7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EED70ED-8D8B-4C4D-82BA-21F8BF0DA7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EED70ED-8D8B-4C4D-82BA-21F8BF0DA7D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E12C4163-360C-404E-B6D7-4BD6CE3F2A81}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://nimccoll.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = BlobUploadAndIndex\\BlobUploadAndIndex.csproj
+		SccProjectName1 = BlobUploadAndIndex
+		SccLocalPath1 = BlobUploadAndIndex
+		SccProjectUniqueName2 = JfkInitializer\\JfkInitializer.csproj
+		SccProjectName2 = JfkInitializer
+		SccLocalPath2 = JfkInitializer
+		SccProjectUniqueName3 = JfkWebApiSkills\\JfkWebApiSkills.csproj
+		SccProjectName3 = JfkWebApiSkills
+		SccLocalPath3 = JfkWebApiSkills
+	EndGlobalSection
+EndGlobal

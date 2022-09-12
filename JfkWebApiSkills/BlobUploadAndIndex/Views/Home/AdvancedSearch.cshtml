@@ -1,0 +1,211 @@
+﻿<!--
+//===============================================================================
+// Microsoft FastTrack for Azure
+// Azure Search OCR Files Example
+//===============================================================================
+// Copyright © Microsoft Corporation.  All rights reserved.
+// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY
+// OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT
+// LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+// FITNESS FOR A PARTICULAR PURPOSE.
+//===============================================================================
+-->
+@model BlobUploadAndIndex.Models.SearchResults
+
+@{
+    ViewData["Title"] = "Search JFK Files";
+}
+
+<div class="row">
+    <div class="col-md-6"><h2>Search JFK Files</h2></div>
+    <div class="col-md-6 d-flex align-items-center"><span><b>Index Last Updated:</b> @ViewBag.LastIndexUpdateDateTime</span></div>
+</div>
+<div class="row">
+    <div class="input-group mb-3 col-md-6">
+        <input name="txtSearch" id="txtSearch" type="text" class="type-ahead form-control" value="@ViewBag.SearchText">
+        <div class="input-group-append">
+            <button class="btn btn-outline-primary" type="button" name="btnSearch" id="btnSearch">Search</button>
+        </div>
+    </div>
+    <div class="input-group mb-3 col-md-6">
+    </div>
+</div>
+@if (!string.IsNullOrEmpty(ViewBag.Filter))
+{
+    <div class="row">
+        <div class="col-md-2"><b>Current Filter:</b></div>
+        <div class="input-group mb-3 col-md-10">
+            <input name="txtFilter" id="txtFilter" type="text" class="form-control" value="@ViewBag.Filter.Replace("|", " eq ")" readonly>
+            <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" name="btnReset" id="btnReset">Reset</button>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-2">
+        @foreach (Facet facet in Model.Facets)
+        {
+            @if (facet.FacetName == "entities")
+            {
+                <b>Tags</b>
+            }
+            else
+            {
+                <b>@facet.FacetName</b>
+            }
+            <ul>
+                @foreach (KeyValuePair<string, long?> facetValue in facet.FacetValues)
+                {
+                    <li><a href="Javascript:filterDocuments('@facet.FacetName|@facetValue.Key')">@facetValue.Key</a> (@facetValue.Value)</li>
+                }
+            </ul>
+        }
+    </div>
+    <div class="col-md-10">
+        <table class="table table-sm table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th colspan="2" style="text-align:center">
+                        Results
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.value)
+                {
+                    <tr>
+                        <td>
+                            <a href="#" role="button" data-toggle="modal" data-target="#@item.fileName.Replace(".", "")"><img width="337" height="288" src="@item.thumbnailUrl" /></a>
+                            <div class="alert alert-dark" role="alert" style="margin-bottom:0px">
+                                @item.fileName
+                            </div>
+                        </td>
+                        <td>
+                            @foreach (string text in item.SearchHighlights.text)
+                            {
+                                <p>
+                                    @Html.Raw(text)
+                                </p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li class="@ViewBag.PreviousClass">
+                    @if (ViewBag.PreviousClass.Contains("disabled"))
+                    {
+                        <a class="page-link" href="Javascript:void(0)">Previous</a>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Previous", "AdvancedSearch", "Home", new { searchText = ViewBag.SearchText, startRow = ViewBag.PreviousRow, numberOfRows = ViewBag.NumberOfRows, filter = ViewBag.Filter }, new { @class = "page-link" })
+                    }
+                </li>
+                <li class="@ViewBag.NextClass">
+                    @if (ViewBag.NextClass.Contains("disabled"))
+                    {
+                        <a class="page-link" href="Javascript:void(0)">Next</a>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Next", "AdvancedSearch", "Home", new { searchText = ViewBag.SearchText, startRow = ViewBag.NextRow, numberOfRows = ViewBag.NumberOfRows, filter = ViewBag.Filter }, new { @class = "page-link" })
+                    }
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<div class="row">
+    @foreach (var item in Model.value)
+    {
+        <div class="modal fade" id="@item.fileName.Replace(".", "")" tabindex="-1" role="dialog" aria-labelledby="@string.Concat(item.fileName.Replace(".", ""), "Label")" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="@string.Concat(item.fileName.Replace(".", ""), "Label")">@item.fileName</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @foreach (BlobUploadAndIndex.Models.Page p in item.pages)
+                        {
+                            <div class="row">
+                                <div class="col-md-6"><img src="@p.imageUrl" width="100%" height="100%" /></div>
+                                <div class="col-md-6">@Html.Raw(p.text)</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function searchDocuments(startRow) {
+            var redirectUrl = '/home/advancedSearch/?searchText=';
+            var searchTerm = $('#txtSearch').val();
+            if (searchTerm == '') {
+                searchTerm = "*";
+            }
+            var numberOfRows = @ViewBag.NumberOfRows;
+            var filterText = '@ViewBag.Filter';
+
+            redirectUrl = redirectUrl + searchTerm + '&startRow=' + startRow + '&numberOfRows=' + numberOfRows + '&filter=' + filterText;
+            window.location = redirectUrl;
+        }
+
+        function filterDocuments(filterText) {
+            var redirectUrl = '/home/advancedSearch/?searchText=';
+            var searchTerm = $('#txtSearch').val();
+            if (searchTerm == '') {
+                searchTerm = "*";
+            }
+            var numberOfRows = @ViewBag.NumberOfRows;
+
+            redirectUrl = redirectUrl + searchTerm + '&startRow=1&numberOfRows=' + numberOfRows + '&filter=' + filterText;
+            window.location = redirectUrl;
+        }
+
+        $(document).ready(function () {
+            $('.type-ahead').autocomplete({
+                source: function (request, response) {
+                    var ajaxUrl = '/home/autocomplete/?searchText=';
+
+                    $.ajax({
+                        url: ajaxUrl + request.term,
+                        type: 'GET',
+                        cache: false,
+                        dataType: 'json',
+                        success: function (json) {
+                            response(json);
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            console.log('error', textStatus, errorThrown);
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    $('.type-ahead').val(ui.item.label);
+                    return false;
+                }
+            });
+
+            $('#btnSearch').on('click', function (event) {
+                event.preventDefault(); // prevent button click from submitting the form
+                searchDocuments(1);
+            });
+            $('#btnReset').on('click', function (event) {
+                event.preventDefault(); // prevent button click from submitting the form
+                filterDocuments('');
+            });
+        });
+    </script>
+}
